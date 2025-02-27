@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>全程画像智能增值评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .fullscreen-img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            cursor: pointer;
+            transition: opacity 0.5s;
+            position: absolute;
+        }
+
+        #audioPlayer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <img src="1.png" class="fullscreen-img" id="mainImage" alt="图片切换">
+    <audio id="audioPlayer" src="鼠标声.mp3"></audio>
+
+    <script>
+        const totalImages = 16; // 总图片数量
+        let currentImage = 1;
+        const mainImage = document.getElementById('mainImage');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        function playClickSound() {
+            audioPlayer.currentTime = 0;
+            audioPlayer.play().catch(error => {
+                console.error('播放声音时发生错误:', error);
+            });
+        }
+
+        function showNextImage() {
+            if(currentImage >= totalImages) {
+                currentImage = 1; // 循环到第一张
+            } else {
+                currentImage++;
+            }
+            
+            mainImage.style.opacity = 0;
+            setTimeout(() => {
+                mainImage.src = `${currentImage}.png`;
+                mainImage.style.opacity = 1;
+                playClickSound();
+            }, 100);
+        }
+
+        mainImage.addEventListener('click', showNextImage);
+
+        // 添加键盘支持
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Enter') {
+                showNextImage();
+            }
+        });
+    </script>
+</body>
+</html>
